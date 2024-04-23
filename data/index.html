@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+</head>
+
+<body>
+  <div class="topnav">
+    <h1>ESP32 WEB SERVER </h1>
+  </div>
+  <div id="container" style="width: 100%; height: 100%">
+    <div class="card-grid">
+
+      <div class="card">
+        <p class="card-title">Grafico Temperatura</p>
+        <div id="chart-temperature" class="chart-container"></div>
+      </div>
+
+
+      <div class="card">
+        <p class="card-title">
+          <i class="fas fa-thermometer-threequarters" style="color: #059e8a"></i>
+          Temperaturas
+        </p>
+
+        <div class="card-content">
+          <p><span class="reading">Atual: <span id="temperature"></span> &deg;C</span></p>
+          <p><span class="reading">Minima: <span id="minTemperature"></span> &deg;C</span></p>
+          <p><span class="reading">Maxima: <span id="maxTemperature"></span> &deg;C</span></p>
+          <p><span class="reading">Scan Time: <span id="scantime"></span> min</span></p>
+        </div>
+
+
+      </div>
+
+      <div class="card">
+        <p class="card-title">
+          <i class="fas fa-thermometer-half" style="color: #059e8a"></i>
+          Configuracao
+        </p>
+
+        <div class="card-content">
+          <form id="scanTimeForm" autocomplete="off" onsubmit=setScantime()>
+            <p><span class="reading">
+                <label for="scanTime">Scan Time</label>
+                <input type="number" name="scanTime" id="scanTime" step="0.1" size="10">
+                <input type="submit" value="Enviar">
+              </span>
+            </p>
+          </form>
+          <form id="setPointForm" autocomplete="off" onsubmit=setSetpoint()>
+            <p>
+              <span class="reading">
+                <label for="setPoint">Setpoint</label>
+                <input type="number" name="setPoint" id="setPoint" sitep="0.1" size="10">
+                <input type="submit" value="Enviar">
+              </span>
+            </p>
+          </form>
+
+          <form id="hysteresisForm" autocomplete="off" onsubmit=setHysteresis()>
+            <p>
+              <span class="reading">
+                <label for="hysteresis">Hysteresis</label>
+                <input type="number" name="hysteresis" id="hysteresis" step="0.1" size="10">
+                <input type="submit" value="Enviar">
+              </span>
+            </p>
+          </form>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="card-title">
+          <i class="fas fa-thermometer-threequarters" style="color: #059e8a"></i>
+          Commands
+        </p>
+        <p>GPIO state: <span id="state"></span></p>
+        <p><button class="button" onclick="toggleState(1)">ON</button></p>
+        <p><button class="button" onclick=toggleState(0)>OFF</button></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

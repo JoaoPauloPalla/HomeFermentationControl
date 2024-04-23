@@ -1,0 +1,118 @@
+/*  Complete project details: https://randomnerdtutorials.com/esp32-plot-readings-charts-multiple/  */
+
+html {
+  font-family: Arial, Helvetica, sans-serif;
+  display: inline-block;
+  text-align: center;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: white;
+}
+
+p {
+  font-size: 1.4rem;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #0a1128;
+}
+
+body {
+  margin: 0;
+}
+
+.content {
+  padding: 5%;
+}
+
+.card-grid {
+  max-width: 1200px;
+  margin: 10px auto;
+  display: grid;
+  grid-gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.card {
+  background-color: white;
+  box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, 0.5);
+  margin: 5%;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #034078;
+}
+
+.chart-container {
+  padding-right: 3%;
+  padding-left: 3%;
+}
+
+.reading {
+  font-size: 1.2rem;
+  color: #1282a2;
+}
+
+.button {
+  display: inline-block;
+  background-color: #008cba;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  padding: 16px 40px;
+  text-decoration: none;
+  font-size: 30px;
+  margin: 2px;
+  cursor: pointer;
+}
+
+.button2 {
+  display: inline-block;
+  background-color: #f44336;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  padding: 16px 40px;
+  text-decoration: none;
+  font-size: 30px;
+  margin: 2px;
+  cursor: pointer;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-grid {
+  display: grid;
+  padding: 5px;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+}
+
+input {
+  /* padding: 3px; */
+  /* margin-bottom: 10px; */
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
