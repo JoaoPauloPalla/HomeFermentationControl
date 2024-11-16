@@ -2,7 +2,7 @@
 
 DataControllerModule::DataControllerModule() {
     
-    scanTime = 5;
+    scanTime = 1;
     temperature = 0;
     maxTemperature = 0.0;
     minTemperature = 50.0;
@@ -75,11 +75,13 @@ void DataControllerModule::taskTemperatureControl(void *args) {
 
 
         if (temperature > dcm->maxTemperature) {
+            Serial.println("Max temperature: " + String(temperature));
             dcm->maxTemperature = temperature;
             dcm->Events->send(String(temperature).c_str(),"maxTemperatureEvent");
         }
 
         if (temperature < dcm->minTemperature) {
+            Serial.println("Min temperature: " + String(temperature));
             dcm->minTemperature = temperature;
             dcm->Events->send(String(temperature).c_str(),"minTemperatureEvent");
         }
@@ -104,7 +106,19 @@ void DataControllerModule::controlTemperature(float temperature) {
 
 void DataControllerModule::configureEndpoints() {
     /*GET*/
-    Webserver->on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    Webserver->on("/", HTTP_GET, [this](AsyncWebServerRequest *request){
+        
+        String data;
+        StaticJsonDocument<200> jsonDoc;
+        jsonDoc["temperature"] = this->temperature;
+        jsonDoc["maxTemperature"] = this->maxTemperature;
+        jsonDoc["minTemperature"] = this->minTemperature;
+        jsonDoc["temperatureSetpoint"] = this->temperatureSetpoint;
+        jsonDoc["temperatureHysteresis"] = this->temperatureHysteresis;
+        jsonDoc["scanTime"] = this->scanTime;
+        serializeJson(jsonDoc, data);
+        Events->send(data.c_str(),"onload");
+
         request->send(LittleFS, "/index.html", "text/html");
     });
     Webserver->on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -124,11 +138,13 @@ void DataControllerModule::configureEndpoints() {
             String state = jsonDoc["state"];
             if(state == "ON"){
                 digitalWrite(2, HIGH);
-                digitalWrite(27, LOW);
+                digitalWrite(15, LOW);
+                digitalWrite(16, LOW);
                 request->send(200, "text/plain", "LED ON");
             } else if (state == "OFF") {
                 digitalWrite(2, LOW);
-                digitalWrite(27, HIGH);
+                digitalWrite(15, HIGH);
+                digitalWrite(16, HIGH);
                 request->send(200, "text/plain", "LED OFF");
             }else{                
                 request->send(400, "text/plain", "BAD REQUEST");
@@ -137,31 +153,34 @@ void DataControllerModule::configureEndpoints() {
         }
     ); 
 
-    
 
-    Webserver->on("/scantime", HTTP_POST,
+    Webserver->on("/scanTime", HTTP_POST,
         [](AsyncWebServerRequest *request ) { },
         nullptr,
         [this](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {            
             JsonDocument jsonDoc;
             deserializeJson(jsonDoc, data, len);            
-            float newScanTime = jsonDoc["scantime"].as<float>();        
-            this->scanTime = newScanTime;
+            float newScanTime = jsonDoc["scanTime"].as<float>();        
+            if (newScanTime > 0 ){
+                this->scanTime = newScanTime;
+            }
+
+            Serial.println("Scan time updated: " + String(this->scanTime));
             Events->send(String(this->scanTime).c_str(),"scanTimeEvent");
             request->send(200, "text/plain", "OK");        
         }
     );
 
-    Webserver->on("/setpoint", HTTP_POST,
+    Webserver->on("/setPoint", HTTP_POST,
         [](AsyncWebServerRequest *request ) { },
         nullptr,
         [this](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {            
             JsonDocument jsonDoc;
             deserializeJson(jsonDoc, data, len);            
-            float newSetpoint = jsonDoc["setpoint"].as<float>();        
+            float newSetpoint = jsonDoc["setPoint"].as<float>();        
             this->temperatureSetpoint = newSetpoint;
-            Events->send(String(this->temperatureSetpoint).c_str(),"setpointEvent");
             Serial.println("Setpoint updated: " + String(this->temperatureSetpoint));
+            Events->send(String(this->temperatureSetpoint).c_str(),"setPointEvent");
             request->send(200, "text/plain", "OK");        
         }
     );
@@ -172,8 +191,9 @@ void DataControllerModule::configureEndpoints() {
         [this](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {            
             JsonDocument jsonDoc;
             deserializeJson(jsonDoc, data, len);            
-            float newHysteresis = jsonDoc["scantime"].as<float>();        
+            float newHysteresis = jsonDoc["scanTime"].as<float>();        
             this->temperatureHysteresis = newHysteresis;
+            Serial.println("Hysteresis updated: " + String(this->temperatureHysteresis));
             Events->send(String(this->temperatureHysteresis).c_str(),"hysteresisEvent");
             request->send(200, "text/plain", "OK");        
         }

@@ -17,13 +17,14 @@ class DataControllerModule{
         IPAddress ip;
         IPAddress gateway;
         IPAddress subnet;
-
         const char* ssid;
         const char* password;
-        int scanTime;
+
+        int scanTime;        
         float temperature;
         float maxTemperature;
         float minTemperature;
+        
         float temperatureSetpoint;
         float temperatureHysteresis;        
 

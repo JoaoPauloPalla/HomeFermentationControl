@@ -28,26 +28,28 @@ async function toggleState(state) {
   }
 }
 
-async function setScantime(event) {
+async function setScanTime() {
   try {
-    event.preventDefault();
-    const data = { scantime: document.getElementById("scanTime").value };
-    const request = await fetch("/scantime", {
+    const data = { scanTime: document.getElementById("scanTime").value };
+    const request = await fetch("/scanTime", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
+    if (request.ok) {
+      console.log("Scan Time sended");
+    }
   } catch (error) {
     console.error(error);
   }
 }
 
-async function setSetpoint() {
+async function setSetPoint() {
   try {
-    const data = { setpoint: document.getElementById("setPoint").value };
-    const request = await fetch("/setpoint", {
+    const data = { setPoint: document.getElementById("setPoint").value };
+    const request = await fetch("/setPoint", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -80,23 +82,13 @@ var chartTemperature = Highcharts.chart({
   title: { text: undefined },
   series: [
     {
-      name: "Ambient Temperature",
+      name: "Temperature",
       type: "line",
       color: "#101D42",
       marker: {
         symbol: "circle",
         radius: 3,
         fillColor: "#101D42",
-      },
-    },
-    {
-      name: "Internal Temperature",
-      type: "line",
-      color: "#8B2635",
-      marker: {
-        symbol: "square",
-        radius: 3,
-        fillColor: "#8B2635",
       },
     },
   ],
@@ -126,12 +118,14 @@ if (!!window.EventSource) {
   var source = new EventSource("/events");
 
   source.addEventListener("load", function (e) {
+    console.log("Data Loaded: " + e.data);
+
     //Initial variables
     document.getElementById("state").innerHTML = null;
     document.getElementById("temperature").innerHTML = null;
     document.getElementById("maxTemperature").innerHTML = null;
     document.getElementById("minTemperature").innerHTML = null;
-    document.getElementById("scantime").innerHTML = null;
+    document.getElementById("scanTime").innerHTML = null;
   });
 
   source.addEventListener(
@@ -152,16 +146,6 @@ if (!!window.EventSource) {
     false
   );
 
-  //Forms
-  // source.addEventListener(
-  //   "scanTimeForm",
-  //   function (e) {
-  //     e.preventDefault();
-  //     setScantime(e.data);
-  //   },
-  //   false
-  // );
-
   //Medidas
   source.addEventListener(
     "temperatureEvent",
@@ -174,14 +158,11 @@ if (!!window.EventSource) {
       let data = new Date();
       var x = data.setHours(data.getHours() - 3);
       var y = temperature;
-      var z = temperature - 5;
 
       if (chartTemperature.series[0].data.length > 40) {
         chartTemperature.series[0].addPoint([x, y], true, true, true);
-        chartTemperature.series[1].addPoint([x, z], true, true, true);
       } else {
         chartTemperature.series[0].addPoint([x, y], true, false, true);
-        chartTemperature.series[1].addPoint([x, z], true, false, true);
       }
     },
     false
@@ -208,11 +189,11 @@ if (!!window.EventSource) {
   );
 
   source.addEventListener(
-    "scantimeEvent",
+    "scanTimeEvent",
     function (e) {
-      var scantime = parseFloat(e.data);
-      document.getElementById("scanTime").innerHTML = scantime;
-      console.log("scantime: " + scantime);
+      var scanTime = parseFloat(e.data);
+      document.getElementById("scanTime").innerHTML = scanTime;
+      console.log("scanTime: " + scanTime);
     },
     false
   );
@@ -220,9 +201,9 @@ if (!!window.EventSource) {
   source.addEventListener(
     "setPointEvent",
     function (e) {
-      var setpoint = parseFloat(e.data);
-      document.getElementById("setPoint").innerHTML = setpoint;
-      console.log("setPoint: " + setpoint);
+      var setPoint = parseFloat(e.data);
+      document.getElementById("setPoint").innerHTML = setPoint;
+      console.log("setPoint: " + setPoint);
     },
     false
   );

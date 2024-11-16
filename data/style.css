@@ -32,8 +32,8 @@ body {
   max-width: 1200px;
   margin: 10px auto;
   display: grid;
-  grid-gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
 
 .card {
@@ -115,4 +115,53 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+.card-content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-gap: 0.5rem;
+  margin: 5%;
+  align-items: center;
+}
+
+.card-content-grid label {
+  color: #1282a2;
+  font-size: 1rem;
+  grid-column: 1;
+  width: 100px;
+}
+
+.card-content-grid input {
+  grid-column: 2;
+  width: 75px;
+}
+
+.card-content-grid button {
+  grid-column: 3;
+  font-size: 0.75rem;
+  width: 60px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.card-content-grid p {
+  grid-column: 1/4;
+  font-size: 1.2rem;
+  color: #1282a2;
+  text-align: left;
+  font-weight: bold;
+  margin: 2%;
+}
+
+.card-content-grid span {
+  font-size: 1rem;
+  color: #1282a2;
+  text-align: left;
+}
+
+.card-content-grid input[type="number"] {
+  font-size: 1rem;
+  color: #1282a2;
+  text-align: center;
 }
