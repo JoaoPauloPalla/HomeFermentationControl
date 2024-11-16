@@ -6,19 +6,19 @@ This project aims to create a temperature control system using the ESP32 microco
 
 ### Features
 
-Real-time temperature monitoring
-Temperature control with hysteresis
-Web interface to view and control temperature
-Support for real-time events to update the web interface
-Parallel processing for improved system performance and efficiency
+- Real-time temperature monitoring
+- Temperature control with hysteresis
+- Web interface to view and control temperature
+- Support for real-time events to update the web interface
+- Parallel processing for improved system performance and efficiency
 
 ### Technologies Used
 
-ESP32 microcontroller
-C++ programming language for ESP32 programming
-Arduino and ESPAsyncWebServer libraries for web server development
-Highcharts for real-time graph visualization
-FreeRTOS for parallel processing and task management
+- ESP32 microcontroller
+- C++ programming language for ESP32 programming
+- Arduino and ESPAsyncWebServer libraries for web server development
+- Highcharts for real-time graph visualization
+- FreeRTOS for parallel processing and task management
 
 ## Commands utils
 
